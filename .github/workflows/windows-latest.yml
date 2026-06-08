@@ -21,9 +21,9 @@ jobs:
       - name: ⚙️ Run Setup Script (start.bat)
         shell: pwsh
         run: |
-          .\start.bat "Pinggy-Tunnel" "rdpuser" "OLDUSER#06" "Latest"
+          .\start.bat "Serveo-Tunnel" "rdpuser" "OLDUSER#06" "Latest"
 
-      - name: 🚀 Start Pinggy Tunnel (Live Console)
+      - name: 🚀 Start Serveo Tunnel (Headless)
         shell: cmd
         run: |
           echo ================================================
@@ -31,5 +31,5 @@ jobs:
           echo Username: rdpuser
           echo Password: OLDUSER#06
           echo ================================================
-          echo ⏳ Connecting to Pinggy... Wait 5-10 seconds for the URL to appear below:
-          ssh -p 443 -R0:localhost:3389 -o StrictHostKeyChecking=no a.pinggy.io
+          echo ⏳ Fetching TCP link from Serveo... Wait a few seconds:
+          ssh -o StrictHostKeyChecking=no -R 0:localhost:3389 serveo.net
