@@ -21,10 +21,28 @@ jobs:
       - name: ⚙️ Run Setup Script (start.bat)
         shell: pwsh
         run: |
-          .\start.bat "Pinggy-Tunnel" "administrator" "OLDUSER#06" "Latest"
+          # Username change kar ke "rdpuser" kar diya hai taake Windows error na de
+          .\start.bat "Pinggy-Tunnel" "rdpuser" "OLDUSER#06" "Latest"
 
       - name: 🚀 Start Pinggy Tunnel
         shell: pwsh
         run: |
-          Write-Host "✅ SYSTEM ACTIVE: Check the terminal output below for your Pinggy TCP address and port!"
-          ssh -p 443 -R0:localhost:3389 -o StrictHostKeyChecking=no a.pinggy.io
+          Write-Host "✅ Starting SSH Tunnel in background..."
+          # SSH ko background process ke taur par chala kar log file mein save kar rahe hain
+          Start-Process -FilePath "ssh" -ArgumentList "-p 443 -R0:localhost:3389 -o StrictHostKeyChecking=no a.pinggy.io" -RedirectStandardOutput "pinggy.log" -RedirectStandardError "pinggy_err.log" -WindowStyle Hidden
+          
+          # Tunnel establish hone ke liye 15 seconds ka wait
+          Write-Host "⏳ Waiting for Pinggy to generate URL..."
+          Start-Sleep -Seconds 15
+          
+          # Log file ko terminal mein print karna taake IP mil jaye
+          Write-Host "============ PINGGY CONNECTION INFO ============"
+          Get-Content pinggy.log
+          Get-Content pinggy_err.log
+          Write-Host "================================================"
+          Write-Host "✅ RDP IS LIVE! Use the tcp:// address above to connect."
+          Write-Host "Username: rdpuser"
+          Write-Host "Password: OLDUSER#06"
+          
+          # Server ko zinda rakhne ke liye infinite loop
+          while ($true) { Start-Sleep -Seconds 300 }
