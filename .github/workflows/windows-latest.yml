@@ -41,7 +41,7 @@ jobs:
           Write-Host "Using ngrok token: $($token.Substring(0,[Math]::Min(10,$token.Length)))***"
           .\ngrok\ngrok.exe config add-authtoken $token
         env:
-          NGROK_AUTH: ${{ secrets.TAKEN }}
+          NGROK_AUTH: ${{ secrets.NGROK_AUTH_TOKEN }}
 
       - name: 🔧 Enable RDP & Configure Firewall
         run: |
