@@ -21,15 +21,20 @@ jobs:
       - name: ⚙️ Run Setup Script (start.bat)
         shell: pwsh
         run: |
-          .\start.bat "Serveo-Tunnel" "rdpuser" "OLDUSER#06" "Latest"
+          .\start.bat "Bore-Tunnel" "rdpuser" "OLDUSER#06" "Latest"
 
-      - name: 🚀 Start Serveo Tunnel (Headless)
-        shell: cmd
+      - name: 🚀 Start Bore Tunnel (Bulletproof)
+        shell: pwsh
         run: |
-          echo ================================================
-          echo ✅ SYSTEM ACTIVE! RDP IS READY TO CONNECT
-          echo Username: rdpuser
-          echo Password: OLDUSER#06
-          echo ================================================
-          echo ⏳ Fetching TCP link from Serveo... Wait a few seconds:
-          ssh -o StrictHostKeyChecking=no -R 0:localhost:3389 serveo.net
+          Write-Host "📥 Downloading Bore Tunnel..."
+          Invoke-WebRequest -Uri "https://github.com/ekzhang/bore/releases/download/v0.5.2/bore-v0.5.2-x86_64-pc-windows-msvc.zip" -OutFile "bore.zip"
+          Expand-Archive "bore.zip" -DestinationPath "."
+          
+          Write-Host "================================================"
+          Write-Host "✅ SYSTEM ACTIVE! RDP IS READY TO CONNECT"
+          Write-Host "Username: rdpuser"
+          Write-Host "Password: OLDUSER#06"
+          Write-Host "================================================"
+          Write-Host "⏳ Tunnel starting... Look for 'listening at bore.pub:XXXXX' below:"
+          
+          .\bore.exe local 3389 --to bore.pub
